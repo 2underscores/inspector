@@ -113,13 +113,19 @@ export const oauthTransitions: Record<OAuthStep, StateTransition> = {
         scope = metadata.scopes_supported.join(" ");
       }
 
+      // Azure supports PKCE, but it's not advertised in metadata
+      if (metadata.issuer.includes("login.microsoftonline.com") && !metadata.code_challenge_methods_supported) {
+        console.log("Detected Azure AD - adding PKCE support to metadata");
+        metadata.code_challenge_methods_supported = ["S256"];
+      }
+
       // Generate a random state
       const array = new Uint8Array(32);
       crypto.getRandomValues(array);
       const state = Array.from(array, (byte) =>
         byte.toString(16).padStart(2, "0"),
       ).join("");
-
+      
       const { authorizationUrl, codeVerifier } = await startAuthorization(
         context.serverUrl,
         {
