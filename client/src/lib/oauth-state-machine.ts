@@ -64,7 +64,7 @@ export const oauthTransitions: Record<OAuthStep, StateTransition> = {
       context.provider.saveServerMetadata(parsedMetadata);
       context.updateState({
         resourceMetadata,
-        resource,
+        resource: undefined, // TODO: This muse be undefined for azure
         resourceMetadataError,
         authServerUrl,
         oauthMetadata: parsedMetadata,
@@ -134,7 +134,7 @@ export const oauthTransitions: Record<OAuthStep, StateTransition> = {
           redirectUrl: context.provider.redirectUrl,
           scope,
           state: state,
-          resource: context.state.resource ?? undefined,
+          // resource: context.state.resource ?? undefined,
         },
       );
 
