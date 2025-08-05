@@ -125,7 +125,7 @@ export const oauthTransitions: Record<OAuthStep, StateTransition> = {
       const state = Array.from(array, (byte) =>
         byte.toString(16).padStart(2, "0"),
       ).join("");
-      
+
       const { authorizationUrl, codeVerifier } = await startAuthorization(
         context.serverUrl,
         {
